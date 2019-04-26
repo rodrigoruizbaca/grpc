@@ -15,7 +15,14 @@ const notes = grpc.loadPackageDefinition(packageDefinition).notes;
 
 const client = new notes.NoteService('localhost:50051', grpc.credentials.createInsecure());
 
-console.log(client.list);
+client.sayHello({}, (error, message) => {
+    if (!error) {
+        console.log('successfully fetch a message')
+        console.log(message)
+    } else {
+        console.error(error)
+    }
+});
 
 client.list({}, (error, arr) => {
     if (!error) {

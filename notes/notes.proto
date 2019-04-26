@@ -5,9 +5,15 @@ package notes;
 
 service NoteService {
     rpc List (Empty) returns (NoteList) {}
+
+    rpc sayHello(Empty) returns (Message) {}
 }
 
 message Empty {}
+
+message Message {
+   string message = 1;
+}
 
 message Note {
    string id = 1;

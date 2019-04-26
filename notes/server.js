@@ -22,13 +22,20 @@ const arr = [
 ];
 
 const list = (call, callback) => {
-    console.log(call);
-    callback(null, arr);
+    callback(null, {notes: arr});
+    
+};
+
+const sayHello = (call, callback) => {
+    callback(null, {
+        "message": "Hello World!"
+    });
     
 };
 
 server.addService(notesProto.NoteService.service, {
-    list
+    list,
+    sayHello
 });
 
 
