@@ -21,10 +21,19 @@ const wrap = (client, metadata, options) => {
     return instance;
 };
 
+const interceptor = function(options, nextCall) {
+    return new grpc.InterceptingCall(nextCall(options), {
+        sendMessage: function(message, next) {
+            console.log("Intercepting");
+            next(message);
+        }
+    });
+};
+
 const execute = async () => {
     const client = new services.NoteServiceClient('localhost:50051', grpc.credentials.createInsecure());
 
-    const wrapper = wrap(client, {}, { retry: 3 });
+    const wrapper = wrap(client, {}, { retry: 3, interceptors: [interceptor] });
 
     const request = new messages.Empty();
 
