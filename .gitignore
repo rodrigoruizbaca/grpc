@@ -1,2 +1,5 @@
 */node_modules/*
 */package-lock.json
+pingpong/client/node_modules/
+pingpong/service/node_modules/
+*.lock

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+
+package pingpoong;
+
+service PingPong {
+    // Sends a greeting
+    rpc ping (Empty) returns (PingPongResponse) {}
+}
+
+message Empty {
+    
+}
+  
+  // The response message containing the greetings
+message PingPongResponse {
+    string message = 1;
+}
