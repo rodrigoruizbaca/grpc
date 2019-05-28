@@ -20,7 +20,7 @@ module.exports = class LoadBalancer {
         return this.servicediscovery.discoverInstances({
             NamespaceName: 'rbaca.grpc', /* required */
             ServiceName: 'grpc-discovery-service', /* required */
-            HealthStatus: 'HEALTHY'
+            HealthStatus: 'UNHEALTHY'
         }).promise().then(data => {
             data.Instances.forEach(s => {
                 const url = `${s.Attributes.AWS_INSTANCE_IPV4}:${s.Attributes.AWS_INSTANCE_PORT}`;  
@@ -42,11 +42,19 @@ module.exports = class LoadBalancer {
         });
     }
 
-    getEndpoint(serviceName) {
-        const service = this.services[serviceName];
+    async getEndpoint(serviceName) {
+        const service = this.services[serviceName];        
+        while (true) {            
+            if (service && service.endpoints.length > 0) {
+                break;
+            } else {
+                console.log('No endpoints available, trying to fetch more...');
+                await this.refresh();
+            }
+        }
         const endpoints = service.endpoints;
         const idx = (service.next++) % endpoints.length;
-        return endpoints[idx];
+        return endpoints[idx];        
     } 
 
     list() {

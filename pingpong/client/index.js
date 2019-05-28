@@ -21,7 +21,7 @@ const main = async() => {
     loadBalancer = new LoadBalancer();
     await loadBalancer.refresh();
     for (x = 0; x < 10; x++) {
-        const conn = loadBalancer.getEndpoint('grpc-pingpong-service');
+        const conn = await loadBalancer.getEndpoint('grpc-pingpong-service');
         const client = conn.client;
 
         const res = await doPing(client);
