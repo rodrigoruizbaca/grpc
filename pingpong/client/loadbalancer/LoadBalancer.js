@@ -14,14 +14,18 @@ module.exports = class LoadBalancer {
         this.servicediscovery = new AWS.ServiceDiscovery();
         this.services = [];       
         this.next = 0;
+        
     }
 
-    refresh() {
-        return this.servicediscovery.discoverInstances({
-            NamespaceName: 'rbaca.grpc', /* required */
-            ServiceName: 'grpc-discovery-service', /* required */
-            HealthStatus: 'HEALTHY'
-        }).promise().then(data => {
+    async refresh() {
+        console.log('Refreshing endpoints from discovery service');
+        this.services = []; 
+        try {
+            const data = await this.servicediscovery.discoverInstances({
+                NamespaceName: 'rbaca.grpc', /* required */
+                ServiceName: 'grpc-discovery-service', /* required */
+                HealthStatus: 'HEALTHY'
+            }).promise();
             data.Instances.forEach(s => {
                 const url = `${s.Attributes.AWS_INSTANCE_IPV4}:${s.Attributes.AWS_INSTANCE_PORT}`;  
                 const serviceName = s.Attributes.ECS_SERVICE_NAME;  
@@ -39,19 +43,28 @@ module.exports = class LoadBalancer {
                 } 
                 this.services[serviceName].endpoints.push(endpoint);
             });
-        });
+        } catch (err) {
+
+        } 
+        
     }
 
-    async getEndpoint(serviceName) {
-        const service = this.services[serviceName];        
-        while (true) {            
-            if (service && service.endpoints.length > 0) {
+    async start() {
+        await loadBalancer.refresh();
+        setInterval(async() => {await loadBalancer.refresh()}, 5000);
+    }
+
+    async getEndpoint(serviceName) {       
+        while (true) {   
+            const service = this.services[serviceName];      
+            if (service && service.endpoints.length >= 2) {
                 break;
             } else {
                 console.log('No endpoints available, trying to fetch more...');
                 await this.refresh();
             }
         }
+        const service = this.services[serviceName]; 
         const endpoints = service.endpoints;
         const idx = (service.next++) % endpoints.length;
         return endpoints[idx];        
