@@ -20,7 +20,7 @@ module.exports = class LoadBalancer {
         return this.servicediscovery.discoverInstances({
             NamespaceName: 'rbaca.grpc', /* required */
             ServiceName: 'grpc-discovery-service', /* required */
-            HealthStatus: 'UNHEALTHY'
+            HealthStatus: 'HEALTHY'
         }).promise().then(data => {
             data.Instances.forEach(s => {
                 const url = `${s.Attributes.AWS_INSTANCE_IPV4}:${s.Attributes.AWS_INSTANCE_PORT}`;  

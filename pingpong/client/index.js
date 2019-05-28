@@ -23,9 +23,13 @@ const main = async() => {
     for (x = 0; x < 10; x++) {
         const conn = await loadBalancer.getEndpoint('grpc-pingpong-service');
         const client = conn.client;
-
-        const res = await doPing(client);
-        console.log(`Doing ping to ${conn.url} -> ${res}`);
+        try {
+            const res = await doPing(client);
+            console.log(`Doing ping to ${conn.url} -> ${res}`);
+        } catch (err) {
+            console.log(`Error trying to call the service, refreshing the endpoints list`);
+            await loadBalancer.refresh();
+        }        
     }
 }
 main();
