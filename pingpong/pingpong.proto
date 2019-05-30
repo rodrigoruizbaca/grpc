@@ -15,4 +15,5 @@ message Empty {
   // The response message containing the greetings
 message PingPongResponse {
     string message = 1;
+    string message_2  =2;
 }

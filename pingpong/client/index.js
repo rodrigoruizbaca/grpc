@@ -1,7 +1,8 @@
 
 const LoadBalancer = require('./loadbalancer/LoadBalancer');
 const messages = require('./static_codegen/pingpong_pb');
-
+const services = require('./static_codegen/pingpong_grpc_pb');
+const grpc = require('grpc');
 
 
 const doPing = (connection) => {
@@ -19,12 +20,10 @@ const doPing = (connection) => {
 }
 
 const main = async() => {
-    loadBalancer = new LoadBalancer();
-    
-    /*let timerId = setTimeout(async function tick() {
-        await loadBalancer.refresh();
-        timerId = setTimeout(tick, 2000); 
-    }, 5000);*/
+    const client = new services.PingPongClient('localhost:3000', grpc.credentials.createInsecure());
+    const res = await doPing(client);
+    console.log(`Doing ping response -> ${res}`);
+    /*loadBalancer = new LoadBalancer();
 
     await loadBalancer.refresh(true);
     while (true) {
@@ -42,6 +41,6 @@ const main = async() => {
             console.log(`No available endpoints at this moment`);
             await loadBalancer.refresh(true);
         }               
-    }
+    }*/
 }
 main();

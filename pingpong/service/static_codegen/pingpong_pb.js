@@ -184,7 +184,8 @@ proto.pingpoong.PingPongResponse.prototype.toObject = function(opt_includeInstan
  */
 proto.pingpoong.PingPongResponse.toObject = function(includeInstance, msg) {
   var f, obj = {
-    message: jspb.Message.getFieldWithDefault(msg, 1, "")
+    message: jspb.Message.getFieldWithDefault(msg, 1, ""),
+    message2: jspb.Message.getFieldWithDefault(msg, 2, "")
   };
 
   if (includeInstance) {
@@ -225,6 +226,10 @@ proto.pingpoong.PingPongResponse.deserializeBinaryFromReader = function(msg, rea
       var value = /** @type {string} */ (reader.readString());
       msg.setMessage(value);
       break;
+    case 2:
+      var value = /** @type {string} */ (reader.readString());
+      msg.setMessage2(value);
+      break;
     default:
       reader.skipField();
       break;
@@ -261,6 +266,13 @@ proto.pingpoong.PingPongResponse.serializeBinaryToWriter = function(message, wri
       f
     );
   }
+  f = message.getMessage2();
+  if (f.length > 0) {
+    writer.writeString(
+      2,
+      f
+    );
+  }
 };
 
 
@@ -276,6 +288,21 @@ proto.pingpoong.PingPongResponse.prototype.getMessage = function() {
 /** @param {string} value */
 proto.pingpoong.PingPongResponse.prototype.setMessage = function(value) {
   jspb.Message.setProto3StringField(this, 1, value);
+};
+
+
+/**
+ * optional string message_2 = 2;
+ * @return {string}
+ */
+proto.pingpoong.PingPongResponse.prototype.getMessage2 = function() {
+  return /** @type {string} */ (jspb.Message.getFieldWithDefault(this, 2, ""));
+};
+
+
+/** @param {string} value */
+proto.pingpoong.PingPongResponse.prototype.setMessage2 = function(value) {
+  jspb.Message.setProto3StringField(this, 2, value);
 };
 
 

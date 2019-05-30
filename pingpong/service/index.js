@@ -11,7 +11,7 @@ const ping = (call, callback) => {
 function main() {
     var server = new grpc.Server();
     server.addService(services.PingPongService, {ping});
-    server.bind('0.0.0.0:3000', grpc.ServerCredentials.createInsecure());
+    server.bind('localhost:3000', grpc.ServerCredentials.createInsecure());
     console.log('Server running at http://0.0.0.0:3000');
     server.start();
   }
