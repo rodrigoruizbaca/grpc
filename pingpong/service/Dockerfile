@@ -5,5 +5,5 @@ RUN npm install
 COPY index.js /app
 COPY ./static_codegen/ /app/static_codegen/
 CMD node index.js
-EXPOSE 50051
+EXPOSE 3000
 

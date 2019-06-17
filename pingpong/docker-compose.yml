@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  demo-envoy-proxy:
+    image: envoyproxy/envoy
+    ports:
+      - "10000:10000"
+      - "9901:9901"
+    volumes:
+      - ./envoy.yaml:/etc/envoy/envoy.yaml
+
+  demo-server1:
+    image: grpc-pingpong
+    ports:
+      - 3000:3000
+    environment:
+      SERVER_NAME: grpc-1
+
+  demo-server2:
+    image: grpc-pingpong
+    ports:
+      - 3001:3000
+    environment:
+      SERVER_NAME: grpc-2
