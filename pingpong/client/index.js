@@ -23,7 +23,7 @@ const main = async() => {
     const client = new services.PingPongClient('localhost:3000', grpc.credentials.createInsecure());
     const res = await doPing(client);
     console.log(`Doing ping response -> ${res}`);
-    /*loadBalancer = new LoadBalancer();
+    loadBalancer = new LoadBalancer();
 
     await loadBalancer.refresh(true);
     while (true) {
@@ -41,6 +41,6 @@ const main = async() => {
             console.log(`No available endpoints at this moment`);
             await loadBalancer.refresh(true);
         }               
-    }*/
+    }
 }
 main();
